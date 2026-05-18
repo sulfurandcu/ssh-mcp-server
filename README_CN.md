@@ -41,6 +41,20 @@ NPM: [https://www.npmjs.com/package/@fangjunjie/ssh-mcp-server](https://www.npmj
 
 ## 📚 使用方法
 
+### 0. 🤖 通过 AI Skill 快速配置（推荐）
+
+如果你使用支持 skill 的 AI 编程助手（如 Claude Code），可以直接使用内置的 **ssh-mcp-helper** skill 通过交互式问答完成安装和配置，无需手动编辑 JSON 文件。
+
+**使用方式：**
+
+1. 从本仓库 `skills/` 目录安装该 skill
+2. 告诉你的 AI 助手："帮我配置 ssh-mcp-server" 或 "给 Cursor 加一个 SSH MCP 连接"
+3. skill 会逐步引导你：检查 Node.js 环境 → 选择 MCP 客户端 → 选择认证方式 → 收集连接参数 → 生成并写入配置
+
+该 skill 支持下文所有场景（账号密码、私钥、SSH config 复用、SOCKS 代理、堡垒机、多连接、2FA、命令限制等），并自动生成格式正确的配置。
+
+---
+
 下面的章节按从简单到复杂的顺序排列，最简单的入门方式就是用账号密码连接服务器。直接复制对应场景下的 `mcp.json` 配置到你的 MCP 客户端即可使用。
 
 > **⚠️ 重要提示**：在 MCP 配置文件中，每个命令行参数和其值必须是 `args` 数组中的独立元素。不要用空格将它们连接在一起。例如，使用 `"--host", "192.168.1.1"` 而不是 `"--host 192.168.1.1"`。

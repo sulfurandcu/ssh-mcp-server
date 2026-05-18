@@ -47,6 +47,20 @@ NPM: [https://www.npmjs.com/package/@fangjunjie/ssh-mcp-server](https://www.npmj
 
 ## 📚 Usage
 
+### 0. 🤖 Quick Setup via AI Skill (Recommended)
+
+If you are using an AI coding assistant that supports skills (such as Claude Code), you can use the built-in **ssh-mcp-helper** skill to complete the installation and configuration interactively — no need to manually edit JSON files.
+
+**How to use:**
+
+1. Install the skill from this repository's `skills/` directory
+2. Tell your AI assistant: "Help me set up ssh-mcp-server" or "Configure SSH MCP for my remote server"
+3. The skill will guide you step by step: check Node.js environment → choose MCP client → select authentication method → collect connection parameters → generate and write configuration
+
+The skill supports all scenarios covered below (password, private key, SSH config reuse, SOCKS proxy, bastion hosts, multi-connection, 2FA, command restrictions, etc.) and automatically produces correctly formatted configuration.
+
+---
+
 The sections below are arranged from the simplest entry point (username + password) to more advanced scenarios. Pick the case that matches yours and copy the `mcp.json` snippet directly into your MCP client configuration.
 
 > **⚠️ Important**: In MCP configuration files, each command line argument and its value must be separate elements in the `args` array. Do NOT combine them with spaces. For example, use `"--host", "192.168.1.1"` instead of `"--host 192.168.1.1"`.
