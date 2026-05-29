@@ -23,3 +23,6 @@ memo.md
 .claude/
 .mcp.json
 docs
+
+# codex
+.agents

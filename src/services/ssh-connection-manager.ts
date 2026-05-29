@@ -497,6 +497,9 @@ export class SSHConnectionManager {
       );
       return "File uploaded successfully";
     } catch (error) {
+      if (error instanceof ToolError && error.code === "OPERATION_TIMEOUT") {
+        throw error;
+      }
       if (this.errorPathMatches(error, validatedLocalPath)) {
         throw new ToolError(
           "LOCAL_FILE_READ_FAILED",
@@ -560,6 +563,9 @@ export class SSHConnectionManager {
       return "File downloaded successfully";
     } catch (error) {
       await this.unlinkIfExists(tempLocalPath);
+      if (error instanceof ToolError && error.code === "OPERATION_TIMEOUT") {
+        throw error;
+      }
       if (
         this.errorPathMatches(error, tempLocalPath) ||
         this.errorPathMatches(error, validatedLocalPath)

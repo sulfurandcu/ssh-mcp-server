@@ -1,6 +1,7 @@
 import { describe, it, before, afterEach } from 'node:test';
 import assert from 'node:assert';
 import { EventEmitter } from 'node:events';
+import { Writable } from 'node:stream';
 import { setTimeout as delay } from 'node:timers/promises';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
@@ -943,6 +944,49 @@ describe('SSH Connection Manager', () => {
           assert.ok(error instanceof ToolError);
           assert.strictEqual(error.code, 'OPERATION_TIMEOUT');
           assert.match(error.message, /SFTP open timed out/);
+          return true;
+        },
+      );
+
+      assert.strictEqual(manager.getAllServerInfos()[0].connected, false);
+      assert.strictEqual(client.endCalls, 1);
+    });
+
+    it('SFTP upload 传输超时时保留 OPERATION_TIMEOUT 错误码', async () => {
+      const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ssh-mcp-test-'));
+      const localFile = path.join(tempDir, 'upload.txt');
+      fs.writeFileSync(localFile, 'data');
+
+      const hangingWriteStream = new Writable({
+        write(_chunk, _encoding, _callback) {
+          // Simulate a half-open transfer where the remote write never completes.
+        },
+      });
+      const sftp = new FakeSftp();
+      sftp.createWriteStream = () => hangingWriteStream;
+
+      const client = new FakeClient({
+        onConnect: () => setImmediate(() => client.emit('ready')),
+        onSftp: (callback) => callback(undefined, sftp),
+      });
+
+      manager.createClient = () => client;
+      manager.scheduleStatusCollection = () => {};
+      manager.setConfig({
+        exec: createPasswordConfig({
+          name: 'exec',
+          transportMode: 'exec',
+          allowedLocalPaths: [tempDir],
+          sftpTimeoutMs: 20,
+        }),
+      });
+
+      await assert.rejects(
+        () => manager.upload(localFile, '/tmp/upload.txt', 'exec'),
+        (error) => {
+          assert.ok(error instanceof ToolError);
+          assert.strictEqual(error.code, 'OPERATION_TIMEOUT');
+          assert.match(error.message, /SFTP upload timed out/);
           return true;
         },
       );
