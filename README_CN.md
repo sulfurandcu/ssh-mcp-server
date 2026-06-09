@@ -560,6 +560,8 @@ npx @fangjunjie/ssh-mcp-server \
   --command-template  命令模板；shell 参数用 <quotedCommand>，原样插入用 <command>
   --pty               为命令执行分配伪终端（默认: true）
   --pre-connect       启动时预连接所有配置的 SSH 服务器
+  --version, -v       打印包版本
+  --help              打印帮助信息
 ```
 
 ## 🛡️ 安全注意事项

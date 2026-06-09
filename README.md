@@ -566,6 +566,8 @@ Options:
   --command-template  Command template, use <quotedCommand> for shell arguments or <command> for raw insertion
   --pty               Allocate pseudo-tty for command execution (default: true)
   --pre-connect       Pre-connect to all configured SSH servers on startup
+  --version, -v       Print package version
+  --help              Print this help message
 ```
 
 ## 🛡️ Security Considerations
